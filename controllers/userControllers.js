@@ -1,5 +1,7 @@
 const knex = require("knex")(require("../knexfile"));
+require("dotenv").config();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
   const {
@@ -33,6 +35,42 @@ const registerUser = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ error: "Please enter all the required fields" });
+  }
+
+  try {
+    const user = await knex("users").where({ email: email }).first();
+
+    if (!user) {
+      return res.status(400).json({ error: "User could not be found" });
+    }
+
+    const passwordCorrect = bcrypt.compareSync(password, user.password);
+
+    if (!passwordCorrect) {
+      return res.status(400).json({ error: "Invalid password" });
+    }
+
+    const token = jwt.sign(
+      { firstname: user.first_name, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+    res.status(200).json({token})
+  } catch(error) {
+    return res
+      .status(500)
+      .json({ message: `Could not log in user: ${error.message}` });
+  }
+};
+
 module.exports = {
   registerUser,
+  loginUser,
 };
