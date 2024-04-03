@@ -26,12 +26,12 @@ const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
     });
-    const newUser = await knex("users").where({ id: newUserId[0]}).first();
+    const newUser = await knex("users").where({ id: newUserId[0] }).first();
     res.status(201).json(newUser);
   } catch (error) {
     return res
       .status(500)
-      .json({ message: `Could not create a new user: ${error.message}` });
+      .json({ error: `Could not create a new user: ${error.message}` });
   }
 };
 
@@ -57,20 +57,38 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ error: "Invalid password" });
     }
 
-    const token = jwt.sign(
-      { firstname: user.first_name, email: user.email },
+    const authToken = jwt.sign(
+      { id: user.id, firstname: user.first_name, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
-    res.status(200).json({token})
-  } catch(error) {
+    res.status(200).json({ authToken });
+  } catch (error) {
     return res
       .status(500)
-      .json({ message: `Could not log in user: ${error.message}` });
+      .json({ error: `Could not log in user: ${error.message}` });
+  }
+};
+
+const getUser = async (req, res) => {
+  try {
+    const userId = req.authToken.id;
+    const user = await knex("users").where({ id: userId }).first();
+
+    if (!user) {
+      return res.status(404).json({ error: "User could not be found" });
+    }
+    delete user.password;
+    res.status(200).json(user);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: `Could not get user information: ${error.message}` });
   }
 };
 
 module.exports = {
   registerUser,
   loginUser,
+  getUser,
 };
