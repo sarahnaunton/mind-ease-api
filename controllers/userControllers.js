@@ -48,7 +48,7 @@ const loginUser = async (req, res) => {
     const user = await knex("users").where({ email: email }).first();
 
     if (!user) {
-      return res.status(400).json({ error: "User could not be found" });
+      return res.status(404).json({ error: "User could not be found" });
     }
 
     const passwordCorrect = bcrypt.compareSync(password, user.password);
