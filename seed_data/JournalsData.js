@@ -56,7 +56,7 @@ module.exports = [
     { 
         id: 10,
         entry: "Reflecting on the month gone by. Filled with laughter, learning, and moments of connection. Life's journey is a beautiful tapestry woven with experiences both big and small. Looking forward to what the next month holds.",
-        gratitude: "Wisdom",
+        gratitude: "Wisd",
         users_id: 1,
     }
 ]
