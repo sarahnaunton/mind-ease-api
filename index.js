@@ -13,6 +13,9 @@ app.use(express.json())
 const userRoutes = require("./routes/userRoutes");
 app.use("/api/users", userRoutes)
 
+const journalRoutes = require("./routes/journalRoutes");
+app.use("/api/journals", journalRoutes)
+
 app.listen(port, () => {
 console.log(`running at http://localhost:${port}`)
 })
