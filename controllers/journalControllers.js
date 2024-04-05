@@ -20,8 +20,7 @@ const getJournals = async (req, res) => {
       );
 
     if (!journals.length) {
-      res.status(404).json("No journal entries found");
-      return;
+      return res.status(404).json("No journal entries found");
     }
 
     res.status(200).json(journals);
@@ -56,8 +55,35 @@ const postJournal = async (req, res) => {
         gratitude,
         users_id: userId,
       });
-    const newJournal = await knex("journals").where({"journals.id": newJournalId[0] }).first();
+    const newJournal = await knex("journals")
+      .where({ "journals.id": newJournalId[0] })
+      .first();
     res.status(201).json(newJournal);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: `Could not get journal entries: ${error.message}` });
+  }
+};
+
+const deleteJournals = async (req, res) => {
+    const journalId = req.params.id
+
+  try {
+    const userId = req.authToken.id;
+    const user = await knex("users").where({ id: userId }).first();
+
+    if (!user) {
+      return res.status(404).json({ error: "User could not be found" });
+    }
+
+    const journal = await knex("journals").where({id: journalId});
+
+    if (!journal.length) {
+        return res.status(404).json(`No journal entry found with id: ${journalId}`);
+    }
+    await knex("journals").where({id: journalId}).del();
+    res.status(204).end();
   } catch (error) {
     return res
       .status(500)
@@ -68,4 +94,5 @@ const postJournal = async (req, res) => {
 module.exports = {
   getJournals,
   postJournal,
+  deleteJournals,
 };
