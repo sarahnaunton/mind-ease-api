@@ -8,8 +8,9 @@ router
   .get(authorise, journalControllers.getJournals)
   .post(authorise, journalControllers.postJournal);
 
-  router
+router
   .route("/:id")
-  .delete(authorise, journalControllers.deleteJournals);
+  .delete(authorise, journalControllers.deleteJournals)
+  .patch(authorise, journalControllers.editJournals);
 
 module.exports = router;

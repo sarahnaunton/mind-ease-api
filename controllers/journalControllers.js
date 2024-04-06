@@ -67,7 +67,7 @@ const postJournal = async (req, res) => {
 };
 
 const deleteJournals = async (req, res) => {
-    const journalId = req.params.id
+  const journalId = req.params.id;
 
   try {
     const userId = req.authToken.id;
@@ -77,13 +77,52 @@ const deleteJournals = async (req, res) => {
       return res.status(404).json({ error: "User could not be found" });
     }
 
-    const journal = await knex("journals").where({id: journalId});
+    const journal = await knex("journals").where({ id: journalId });
 
     if (!journal.length) {
-        return res.status(404).json(`No journal entry found with id: ${journalId}`);
+      return res
+        .status(404)
+        .json(`No journal entry found with id: ${journalId}`);
     }
-    await knex("journals").where({id: journalId}).del();
+    await knex("journals").where({ id: journalId }).del();
     res.status(204).end();
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: `Could not get journal entries: ${error.message}` });
+  }
+};
+
+const editJournals = async (req, res) => {
+  const { entry, gratitude } = req.body;
+  const journalId = req.params.id;
+
+  if (!entry && !gratitude) {
+    return res
+      .status(400)
+      .json({ error: "Please enter edit at least one of the required fields" });
+  }
+
+  try {
+    const userId = req.authToken.id;
+    const user = await knex("users").where({ id: userId }).first();
+
+    if (!user) {
+      return res.status(404).json({ error: "User could not be found" });
+    }
+
+    const journal = await knex("journals").where({ id: journalId });
+
+    if (!journal.length) {
+      return res
+        .status(404)
+        .json(`No journal entry found with id: ${journalId}`);
+    }
+
+    await knex("journals").where({ id: journalId }).update(req.body);
+
+    const updatedJournal = await knex("journals").where({id: journalId}).first();
+    res.status(200).json(updatedJournal);
   } catch (error) {
     return res
       .status(500)
@@ -95,4 +134,5 @@ module.exports = {
   getJournals,
   postJournal,
   deleteJournals,
+  editJournals,
 };
