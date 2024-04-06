@@ -66,7 +66,33 @@ const postJournal = async (req, res) => {
   }
 };
 
-const deleteJournals = async (req, res) => {
+const getJournal = async (req, res) => {
+  const journalId = req.params.id;
+
+  try {
+    const userId = req.authToken.id;
+    const user = await knex("users").where({ id: userId }).first();
+
+    if (!user) {
+      return res.status(404).json({ error: "User could not be found" });
+    }
+
+    const journal = await knex("journals").where({ id: journalId });
+
+    if (!journal.length) {
+      return res
+        .status(404)
+        .json(`No journal entry found with id: ${journalId}`);
+    }
+    res.status(200).json(journal[0]);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: `Could not get journal entries: ${error.message}` });
+  }
+};
+
+const deleteJournal = async (req, res) => {
   const journalId = req.params.id;
 
   try {
@@ -93,7 +119,7 @@ const deleteJournals = async (req, res) => {
   }
 };
 
-const editJournals = async (req, res) => {
+const editJournal = async (req, res) => {
   const { entry, gratitude } = req.body;
   const journalId = req.params.id;
 
@@ -121,7 +147,9 @@ const editJournals = async (req, res) => {
 
     await knex("journals").where({ id: journalId }).update(req.body);
 
-    const updatedJournal = await knex("journals").where({id: journalId}).first();
+    const updatedJournal = await knex("journals")
+      .where({ id: journalId })
+      .first();
     res.status(200).json(updatedJournal);
   } catch (error) {
     return res
@@ -133,6 +161,7 @@ const editJournals = async (req, res) => {
 module.exports = {
   getJournals,
   postJournal,
-  deleteJournals,
-  editJournals,
+  getJournal,
+  deleteJournal,
+  editJournal,
 };

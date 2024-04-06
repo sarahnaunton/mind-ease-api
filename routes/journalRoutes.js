@@ -10,7 +10,8 @@ router
 
 router
   .route("/:id")
-  .delete(authorise, journalControllers.deleteJournals)
-  .patch(authorise, journalControllers.editJournals);
+  .get(authorise, journalControllers.getJournal)
+  .delete(authorise, journalControllers.deleteJournal)
+  .patch(authorise, journalControllers.editJournal);
 
 module.exports = router;
