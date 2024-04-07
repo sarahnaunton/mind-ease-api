@@ -62,7 +62,7 @@ const postJournal = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not get journal entries: ${error.message}` });
+      .json({ error: `Could not post journal entry: ${error.message}` });
   }
 };
 
@@ -88,7 +88,7 @@ const getJournal = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not get journal entries: ${error.message}` });
+      .json({ error: `Could not get journal entry: ${error.message}` });
   }
 };
 
@@ -115,7 +115,7 @@ const deleteJournal = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not get journal entries: ${error.message}` });
+      .json({ error: `Could not delete journal entry: ${error.message}` });
   }
 };
 
@@ -126,7 +126,7 @@ const editJournal = async (req, res) => {
   if (!entry && !gratitude) {
     return res
       .status(400)
-      .json({ error: "Please enter edit at least one of the required fields" });
+      .json({ error: "Please enter at least one of the required fields" });
   }
 
   try {
@@ -154,7 +154,7 @@ const editJournal = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not get journal entries: ${error.message}` });
+      .json({ error: `Could not edit journal entry: ${error.message}` });
   }
 };
 
