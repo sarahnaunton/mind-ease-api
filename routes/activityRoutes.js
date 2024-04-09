@@ -6,5 +6,6 @@ const authorise = require("../middleware/auth");
 router
   .route("/")
   .get(authorise, activityControllers.getActivities)
+  .post(authorise, activityControllers.postActivity);
 
 module.exports = router;
