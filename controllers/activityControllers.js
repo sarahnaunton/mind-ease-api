@@ -79,8 +79,6 @@ const getActivity = async (req, res) => {
 };
 
 const deleteActivity = async (req, res) => {
-  const activityId = req.params.id;
-
   try {
     const userId = req.authToken.id;
     const user = await knex("users").where({ id: userId }).first();
