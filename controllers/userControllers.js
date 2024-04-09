@@ -17,6 +17,12 @@ const registerUser = async (req, res) => {
       .json({ error: "Please enter all the required fields" });
   }
 
+  emailValidation = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+
+  if (!emailValidation.test(email)) {
+    return res.status(400).json({ error: "Invalid email address" });
+  }
+
   const hashedPassword = bcrypt.hashSync(password, 6);
 
   try {
@@ -42,6 +48,12 @@ const loginUser = async (req, res) => {
     return res
       .status(400)
       .json({ error: "Please enter all the required fields" });
+  }
+
+  emailValidation = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+
+  if (!emailValidation.test(email)) {
+    return res.status(400).json({ error: "Invalid email address" });
   }
 
   try {
