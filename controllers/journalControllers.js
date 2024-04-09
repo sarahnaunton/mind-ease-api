@@ -19,10 +19,6 @@ const getJournals = async (req, res) => {
         "journals.created_at"
       );
 
-    if (!journals.length) {
-      return res.status(404).json("No journal entries found");
-    }
-
     res.status(200).json(journals);
   } catch (error) {
     return res
