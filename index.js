@@ -19,6 +19,9 @@ app.use("/api/journals", journalRoutes);
 const scoreRoutes = require("./routes/scoreRoutes");
 app.use("/api/scores", scoreRoutes)
 
+const activityRoutes = require("./routes/activityRoutes");
+app.use("/api/activites", activityRoutes)
+
 app.listen(port, () => {
   console.log(`running at http://localhost:${port}`);
 });
