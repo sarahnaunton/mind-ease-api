@@ -23,7 +23,7 @@ const getJournals = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not get journal entries: ${error.message}` });
+      .json({ error: "Could not get journal entries, please try again" });
   }
 };
 
@@ -58,7 +58,7 @@ const postJournal = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not post journal entry: ${error.message}` });
+      .json({ error: "Could not post journal entry, please try again" });
   }
 };
 
@@ -78,13 +78,13 @@ const getJournal = async (req, res) => {
     if (!journal.length) {
       return res
         .status(404)
-        .json(`No journal entry found with id: ${journalId}`);
+        .json({ error: `No journal entry found with id: ${journalId}` });
     }
     res.status(200).json(journal[0]);
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not get journal entry: ${error.message}` });
+      .json({ error: "Could not get journal entry, please try again" });
   }
 };
 
@@ -104,14 +104,14 @@ const deleteJournal = async (req, res) => {
     if (!journal.length) {
       return res
         .status(404)
-        .json(`No journal entry found with id: ${journalId}`);
+        .json({ error: `No journal entry found with id: ${journalId}` });
     }
     await knex("journals").where({ id: journalId }).del();
     res.status(204).end();
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not delete journal entry: ${error.message}` });
+      .json({ error: "Could not delete journal entry, please try again" });
   }
 };
 
@@ -138,7 +138,7 @@ const editJournal = async (req, res) => {
     if (!journal.length) {
       return res
         .status(404)
-        .json(`No journal entry found with id: ${journalId}`);
+        .json({ error: `No journal entry found with id: ${journalId}` });
     }
 
     await knex("journals").where({ id: journalId }).update(req.body);
@@ -150,7 +150,7 @@ const editJournal = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not edit journal entry: ${error.message}` });
+      .json({ error: "Could not edit journal entry, please try again" });
   }
 };
 

@@ -18,7 +18,7 @@ const getActivities = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not get activities: ${error.message}` });
+      .json({ error: "Could not get activities, please try again" });
   }
 };
 
@@ -50,7 +50,7 @@ const postActivity = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not post activity: ${error.message}` });
+      .json({ error: "Could not post activity, please try again" });
   }
 };
 
@@ -68,17 +68,21 @@ const getActivity = async (req, res) => {
     const activity = await knex("activities").where({ id: activityId });
 
     if (!activity.length) {
-      return res.status(404).json(`No activity found with id: ${activityId}`);
+      return res
+        .status(404)
+        .json({ error: `No activity found with id: ${activityId}` });
     }
     res.status(200).json(activity[0]);
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not get activity: ${error.message}` });
+      .json({ error: "Could not get activity, please try again" });
   }
 };
 
 const deleteActivity = async (req, res) => {
+  const activityId = req.params.id;
+
   try {
     const userId = req.authToken.id;
     const user = await knex("users").where({ id: userId }).first();
@@ -90,14 +94,16 @@ const deleteActivity = async (req, res) => {
     const activity = await knex("activities").where({ id: activityId });
 
     if (!activity.length) {
-      return res.status(404).json(`No activity found with id: ${activityId}`);
+      return res
+        .status(404)
+        .json({ error: `No activity found with id: ${activityId}` });
     }
     await knex("activities").where({ id: activityId }).del();
     res.status(204).end();
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not delete activity: ${error.message}` });
+      .json({ error: "Could not delete activity, please try again" });
   }
 };
 
@@ -120,7 +126,9 @@ const editActivity = async (req, res) => {
     const activity = await knex("activities").where({ id: activityId });
 
     if (!activity.length) {
-      return res.status(404).json(`No activity found with id: ${activityId}`);
+      return res
+        .status(404)
+        .json({ error: `No activity found with id: ${activityId}` });
     }
     await knex("activities").where({ id: activityId }).update(req.body);
 
@@ -131,7 +139,7 @@ const editActivity = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not edit activity: ${error.message}` });
+      .json({ error: "Could not edit activity, please try again" });
   }
 };
 

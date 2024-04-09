@@ -37,7 +37,7 @@ const postScores = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not post score and category: ${error.message}` });
+      .json({ error: "Could not post score and category, please try again" });
   }
 };
 
@@ -64,7 +64,7 @@ const getScores = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not get scores: ${error.message}` });
+      .json({ error: "Could not get scores, please try again" });
   }
 };
 

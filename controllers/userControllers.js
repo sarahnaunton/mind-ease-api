@@ -26,6 +26,13 @@ const registerUser = async (req, res) => {
   const hashedPassword = bcrypt.hashSync(password, 6);
 
   try {
+    const existingUser = await knex("users").where({ email: email }).first();
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ error: "This email is already assocaited with an account" });
+    }
+
     const newUserId = await knex("users").insert({
       first_name,
       last_name,
@@ -37,7 +44,7 @@ const registerUser = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not create a new user: ${error.message}` });
+      .json({ error: "Could not create a new user, please try again" });
   }
 };
 
@@ -78,7 +85,7 @@ const loginUser = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not log in user: ${error.message}` });
+      .json({ error: "Could not log in user, please try again" });
   }
 };
 
@@ -95,7 +102,7 @@ const getUser = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: `Could not get user information: ${error.message}` });
+      .json({ error: "Could not get user information, please try again" });
   }
 };
 
