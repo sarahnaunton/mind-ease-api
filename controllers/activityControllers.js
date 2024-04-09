@@ -26,9 +26,7 @@ const postActivity = async (req, res) => {
   const { activity } = req.body;
 
   if (!activity) {
-    return res
-      .status(400)
-      .json({ error: "Please enter all the required fields" });
+    return res.status(400).json({ error: "Please enter the required field" });
   }
 
   try {
@@ -105,9 +103,44 @@ const deleteActivity = async (req, res) => {
   }
 };
 
+const editActivity = async (req, res) => {
+  const { activity } = req.body;
+  const activityId = req.params.id;
+
+  if (!activity) {
+    return res.status(400).json({ error: "Please enter the required field" });
+  }
+
+  try {
+    const userId = req.authToken.id;
+    const user = await knex("users").where({ id: userId }).first();
+
+    if (!user) {
+      return res.status(404).json({ error: "User could not be found" });
+    }
+
+    const activity = await knex("activities").where({ id: activityId });
+
+    if (!activity.length) {
+      return res.status(404).json(`No activity found with id: ${activityId}`);
+    }
+    await knex("activities").where({ id: activityId }).update(req.body);
+
+    const updatedActivity = await knex("activities")
+      .where({ id: activityId })
+      .first();
+    res.status(200).json(updatedActivity);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: `Could not edit activity: ${error.message}` });
+  }
+};
+
 module.exports = {
   getActivities,
   postActivity,
   getActivity,
   deleteActivity,
+  editActivity,
 };

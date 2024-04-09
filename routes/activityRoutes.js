@@ -11,6 +11,7 @@ router
 router
   .route("/:id")
   .get(authorise, activityControllers.getActivity)
-  .delete(authorise, activityControllers.deleteActivity);
+  .delete(authorise, activityControllers.deleteActivity)
+  .put(authorise, activityControllers.editActivity);
 
 module.exports = router;
