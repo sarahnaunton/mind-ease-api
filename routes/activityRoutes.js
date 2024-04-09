@@ -8,6 +8,9 @@ router
   .get(authorise, activityControllers.getActivities)
   .post(authorise, activityControllers.postActivity);
 
-router.route("/:id").get(authorise, activityControllers.getActivity);
+router
+  .route("/:id")
+  .get(authorise, activityControllers.getActivity)
+  .delete(authorise, activityControllers.deleteActivity);
 
 module.exports = router;
