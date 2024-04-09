@@ -60,9 +60,36 @@ const postActivity = async(req, res) => {
   }
 }
 
+const getActivity = async(req, res) => {
+    const activityId = req.params.id;
+
+    try {
+      const userId = req.authToken.id;
+      const user = await knex("users").where({ id: userId }).first();
+  
+      if (!user) {
+        return res.status(404).json({ error: "User could not be found" });
+      }
+  
+      const activity = await knex("activities").where({ id: activityId });
+  
+      if (!activity.length) {
+        return res
+          .status(404)
+          .json(`No activity found with id: ${activityId}`);
+      }
+      res.status(200).json(activity[0]);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: `Could not get activity: ${error.message}` });
+    }
+}
+
 
 module.exports = {
     getActivities,
-    postActivity
+    postActivity,
+    getActivity
   };
   

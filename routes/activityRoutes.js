@@ -8,4 +8,6 @@ router
   .get(authorise, activityControllers.getActivities)
   .post(authorise, activityControllers.postActivity);
 
+router.route("/:id").get(authorise, activityControllers.getActivity);
+
 module.exports = router;
