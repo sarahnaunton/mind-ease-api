@@ -9,6 +9,12 @@ const registerUser = async (req, res) => {
     lastname: last_name,
     email,
     password,
+    birthday: date_of_birth,
+    occupation,
+    role,
+    experience: year_started,
+    setting: work_setting,
+    hours: week_working_hours,
   } = req.body;
 
   if (!first_name || !last_name || !email || !password) {
@@ -38,6 +44,12 @@ const registerUser = async (req, res) => {
       last_name,
       email,
       password: hashedPassword,
+      date_of_birth,
+      occupation,
+      role,
+      year_started,
+      work_setting,
+      week_working_hours,
     });
     const newUser = await knex("users").where({ id: newUserId[0] }).first();
     res.status(201).json(newUser);
