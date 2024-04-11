@@ -30,9 +30,7 @@ const postRecommendation = async (req, res) => {
   const { recommendation } = req.body;
 
   if (!recommendation) {
-    return res
-      .status(400)
-      .json({ error: "Please enter the required field" });
+    return res.status(400).json({ error: "Please enter the required field" });
   }
 
   try {
