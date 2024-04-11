@@ -26,6 +26,40 @@ const getRecommendation = async (req, res) => {
   }
 };
 
+const postRecommendation = async (req, res) => {
+  const { recommendation } = req.body;
+
+  if (!recommendation) {
+    return res
+      .status(400)
+      .json({ error: "Please enter the required field" });
+  }
+
+  try {
+    const userId = req.authToken.id;
+    const user = await knex("users").where({ id: userId }).first();
+
+    if (!user) {
+      return res.status(404).json({ error: "User could not be found" });
+    }
+
+    const newRecommendationId = await knex("recommendations")
+      .where({ "users.id": userId })
+      .insert({
+        recommendation,
+        users_id: userId,
+      });
+    const newRecommendation = await knex("recommendations")
+      .where({ "recommendations.id": newRecommendationId[0] })
+      .first();
+    res.status(201).json(newRecommendation);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: "Could not post recommendation, please try again" });
+  }
+};
+
 const editRecommendation = async (req, res) => {
   const { recommendation } = req.body;
   const recommendationId = req.params.id;
@@ -69,5 +103,6 @@ const editRecommendation = async (req, res) => {
 
 module.exports = {
   getRecommendation,
+  postRecommendation,
   editRecommendation,
 };
