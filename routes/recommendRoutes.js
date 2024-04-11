@@ -5,7 +5,9 @@ const authorise = require("../middleware/auth");
 
 router
   .route("/")
-  .get(authorise, recommendControllers.getRecommendation);
+  .get(authorise, recommendControllers.getRecommendation)
 
-  module.exports = router;
+  router.route("/:id")
+  .put(authorise, recommendControllers.editRecommendation);
 
+module.exports = router;
