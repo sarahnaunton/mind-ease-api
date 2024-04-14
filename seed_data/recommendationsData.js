@@ -1,4 +1,4 @@
 module.exports = {
-    id: 1,
-    users_id: 1,
-}
+  id: 1,
+  users_id: 1,
+};

@@ -17,13 +17,13 @@ const journalRoutes = require("./routes/journalRoutes");
 app.use("/api/journals", journalRoutes);
 
 const scoreRoutes = require("./routes/scoreRoutes");
-app.use("/api/scores", scoreRoutes)
+app.use("/api/scores", scoreRoutes);
 
 const activityRoutes = require("./routes/activityRoutes");
-app.use("/api/activities", activityRoutes)
+app.use("/api/activities", activityRoutes);
 
 const recommendRoutes = require("./routes/recommendRoutes");
-app.use("/api/recommendations", recommendRoutes)
+app.use("/api/recommendations", recommendRoutes);
 
 app.listen(port, () => {
   console.log(`running at http://localhost:${port}`);
